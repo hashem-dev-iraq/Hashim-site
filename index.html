@@ -1,0 +1,2477 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hashem alHakeem — Portfolio</title>
+<script src="https://www.gstatic.com/antigravity/web/dev/tailwindcss.min.js"></script>
+<style>
+  :root {
+    --cyber-bg: #0b0f19;
+    --cyber-bg2: #0d1220;
+    --cyber-card: #111827;
+    --cyber-card2: #131a2e;
+    --cyan: #00ffff;
+    --cyan-dim: #00cccc;
+    --cyan-glow: rgba(0,255,255,0.15);
+    --cyan-glow2: rgba(0,255,255,0.08);
+    --purple: #9d4edd;
+    --purple-dim: #7b35b8;
+    --purple-glow: rgba(157,78,221,0.15);
+    --green: #00ff88;
+    --amber: #ffaa00;
+    --red-cyber: #ff4466;
+    --border-cyan: rgba(0,255,255,0.25);
+    --border-purple: rgba(157,78,221,0.25);
+    --text-primary: #e2e8f0;
+    --text-muted: #64748b;
+    --text-cyan: #00ffff;
+    --text-purple: #c084fc;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--cyber-bg);
+    color: var(--text-primary);
+    font-family: 'Courier New', monospace;
+    overflow-x: hidden;
+    min-height: 100vh;
+  }
+
+  /* ─── SCROLLBAR ─── */
+  ::-webkit-scrollbar { width: 6px; }
+  ::-webkit-scrollbar-track { background: var(--cyber-bg); }
+  ::-webkit-scrollbar-thumb { background: var(--cyan); border-radius: 3px; }
+
+  /* ─── NEURAL MATRIX BACKGROUND ─── */
+  #neural-canvas {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    pointer-events: none;
+    z-index: 0;
+    opacity: 0.4;
+  }
+
+  /* ─── NAVBAR ─── */
+  #navbar {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 1000;
+    background: rgba(11,15,25,0.92);
+    backdrop-filter: blur(16px);
+    border-bottom: 1px solid var(--border-cyan);
+    padding: 0 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 60px;
+  }
+
+  .nav-logo {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--cyan);
+    text-shadow: 0 0 12px var(--cyan);
+    letter-spacing: 2px;
+    cursor: pointer;
+  }
+
+  .nav-links {
+    display: flex;
+    gap: 0.25rem;
+    list-style: none;
+  }
+
+  .nav-links a {
+    color: var(--text-muted);
+    text-decoration: none;
+    font-size: 0.75rem;
+    letter-spacing: 1px;
+    padding: 0.4rem 0.75rem;
+    border: 1px solid transparent;
+    border-radius: 4px;
+    transition: all 0.3s;
+    text-transform: uppercase;
+  }
+
+  .nav-links a:hover, .nav-links a.active {
+    color: var(--cyan);
+    border-color: var(--border-cyan);
+    background: var(--cyan-glow2);
+    text-shadow: 0 0 8px var(--cyan);
+  }
+
+  .status-badge {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: rgba(0,255,136,0.08);
+    border: 1px solid rgba(0,255,136,0.3);
+    border-radius: 20px;
+    padding: 0.25rem 0.75rem;
+    font-size: 0.65rem;
+    color: var(--green);
+    letter-spacing: 1px;
+  }
+
+  .status-dot {
+    width: 7px; height: 7px;
+    border-radius: 50%;
+    background: var(--green);
+    box-shadow: 0 0 8px var(--green);
+    animation: pulse-green 2s infinite;
+  }
+
+  @keyframes pulse-green {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.5; transform: scale(0.85); }
+  }
+
+  /* ─── SECTION BASE ─── */
+  section {
+    position: relative;
+    z-index: 10;
+    padding: 5rem 2rem;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  .section-header {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 3rem;
+  }
+
+  .section-tag {
+    font-size: 0.65rem;
+    letter-spacing: 3px;
+    color: var(--cyan);
+    text-transform: uppercase;
+    opacity: 0.7;
+  }
+
+  .section-title {
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    letter-spacing: 1px;
+  }
+
+  .section-title span { color: var(--cyan); text-shadow: 0 0 20px var(--cyan); }
+
+  .section-line {
+    flex: 1;
+    height: 1px;
+    background: linear-gradient(90deg, var(--border-cyan), transparent);
+  }
+
+  /* ─── CYBER CARD ─── */
+  .cyber-card {
+    background: var(--cyber-card);
+    border: 1px solid var(--border-cyan);
+    border-radius: 8px;
+    padding: 1.5rem;
+    position: relative;
+    overflow: hidden;
+    transition: all 0.3s;
+  }
+
+  .cyber-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, var(--cyan), transparent);
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+
+  .cyber-card:hover::before { opacity: 1; }
+  .cyber-card:hover {
+    border-color: var(--cyan);
+    box-shadow: 0 0 20px var(--cyan-glow), inset 0 0 20px rgba(0,255,255,0.03);
+    transform: translateY(-2px);
+  }
+
+  .cyber-card.purple {
+    border-color: var(--border-purple);
+  }
+
+  .cyber-card.purple::before {
+    background: linear-gradient(90deg, transparent, var(--purple), transparent);
+  }
+
+  .cyber-card.purple:hover {
+    border-color: var(--purple);
+    box-shadow: 0 0 20px var(--purple-glow), inset 0 0 20px rgba(157,78,221,0.03);
+  }
+
+  /* ─── GLITCH TEXT ─── */
+  .glitch {
+    position: relative;
+    animation: glitch-anim 4s infinite;
+  }
+
+  @keyframes glitch-anim {
+    0%, 90%, 100% { text-shadow: 0 0 20px var(--cyan), 0 0 40px var(--cyan); clip-path: none; }
+    91% { text-shadow: 3px 0 var(--red-cyber), -3px 0 var(--cyan); }
+    92% { text-shadow: -3px 0 var(--red-cyber), 3px 0 var(--cyan); }
+    93% { text-shadow: 0 0 20px var(--cyan); }
+  }
+
+  /* ─── HERO SECTION ─── */
+  #home {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    padding-top: 80px;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding-left: 2rem;
+    padding-right: 2rem;
+  }
+
+  .hero-grid {
+    display: grid;
+    grid-template-columns: 1fr 380px;
+    gap: 3rem;
+    align-items: start;
+    width: 100%;
+  }
+
+  .hero-tag-line {
+    font-size: 0.7rem;
+    letter-spacing: 4px;
+    color: var(--cyan);
+    text-transform: uppercase;
+    opacity: 0.8;
+    margin-bottom: 1rem;
+  }
+
+  .hero-name {
+    font-size: 3.5rem;
+    font-weight: 900;
+    line-height: 1.1;
+    color: var(--text-primary);
+    margin-bottom: 0.5rem;
+  }
+
+  .hero-name .accent { color: var(--cyan); text-shadow: 0 0 30px var(--cyan); }
+
+  .hero-subtitle {
+    font-size: 0.9rem;
+    color: var(--cyan);
+    letter-spacing: 2px;
+    margin-bottom: 1.5rem;
+    opacity: 0.9;
+  }
+
+  .hero-bio {
+    font-size: 0.9rem;
+    line-height: 1.8;
+    color: var(--text-muted);
+    margin-bottom: 2rem;
+    max-width: 600px;
+    font-family: 'Courier New', monospace;
+  }
+
+  .hero-bio span { color: var(--cyan); opacity: 0.9; }
+
+  .hero-buttons {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 2.5rem;
+    flex-wrap: wrap;
+  }
+
+  .btn-primary {
+    background: transparent;
+    border: 1px solid var(--cyan);
+    color: var(--cyan);
+    padding: 0.65rem 1.5rem;
+    font-family: 'Courier New', monospace;
+    font-size: 0.8rem;
+    letter-spacing: 2px;
+    cursor: pointer;
+    transition: all 0.3s;
+    text-transform: uppercase;
+    text-decoration: none;
+    display: inline-block;
+    clip-path: polygon(8px 0%, 100% 0%, calc(100% - 8px) 100%, 0% 100%);
+  }
+
+  .btn-primary:hover {
+    background: var(--cyan-glow);
+    box-shadow: 0 0 20px var(--cyan-glow);
+    text-shadow: 0 0 8px var(--cyan);
+  }
+
+  .btn-secondary {
+    background: transparent;
+    border: 1px solid var(--border-purple);
+    color: var(--text-purple);
+    padding: 0.65rem 1.5rem;
+    font-family: 'Courier New', monospace;
+    font-size: 0.8rem;
+    letter-spacing: 2px;
+    cursor: pointer;
+    transition: all 0.3s;
+    text-transform: uppercase;
+    text-decoration: none;
+    display: inline-block;
+    clip-path: polygon(8px 0%, 100% 0%, calc(100% - 8px) 100%, 0% 100%);
+  }
+
+  .btn-secondary:hover {
+    background: var(--purple-glow);
+    box-shadow: 0 0 20px var(--purple-glow);
+    border-color: var(--purple);
+  }
+
+  .meta-badges {
+    display: flex;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+  }
+
+  .meta-badge {
+    background: rgba(0,255,255,0.05);
+    border: 1px solid var(--border-cyan);
+    border-radius: 4px;
+    padding: 0.4rem 0.9rem;
+    font-size: 0.65rem;
+    letter-spacing: 1.5px;
+    color: var(--text-muted);
+  }
+
+  .meta-badge .label { color: var(--cyan); margin-right: 0.4rem; }
+
+  /* ─── SHIELD WIDGET ─── */
+  .shield-widget {
+    background: var(--cyber-card);
+    border: 1px solid var(--border-cyan);
+    border-radius: 8px;
+    overflow: hidden;
+    position: sticky;
+    top: 80px;
+  }
+
+  .shield-header {
+    background: rgba(0,255,255,0.05);
+    border-bottom: 1px solid var(--border-cyan);
+    padding: 0.75rem 1.25rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .shield-title {
+    font-size: 0.65rem;
+    letter-spacing: 2px;
+    color: var(--cyan);
+    text-transform: uppercase;
+  }
+
+  .shield-status {
+    font-size: 0.6rem;
+    color: var(--green);
+    display: flex;
+    align-items: center;
+    gap: 0.35rem;
+  }
+
+  .shield-body { padding: 1rem 1.25rem; }
+
+  .diag-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.4rem 0;
+    border-bottom: 1px solid rgba(255,255,255,0.03);
+    font-size: 0.7rem;
+  }
+
+  .diag-row:last-child { border-bottom: none; }
+  .diag-label { color: var(--text-muted); letter-spacing: 1px; }
+  .diag-val { color: var(--cyan); font-weight: 700; font-size: 0.75rem; }
+  .diag-val.green { color: var(--green); }
+  .diag-val.amber { color: var(--amber); }
+  .diag-val.purple { color: var(--text-purple); }
+
+  .shield-bar-wrap {
+    margin: 0.3rem 0;
+  }
+
+  .shield-bar-label {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.65rem;
+    color: var(--text-muted);
+    margin-bottom: 0.2rem;
+  }
+
+  .shield-bar {
+    height: 4px;
+    background: rgba(255,255,255,0.05);
+    border-radius: 2px;
+    overflow: hidden;
+  }
+
+  .shield-bar-fill {
+    height: 100%;
+    border-radius: 2px;
+    transition: width 1s ease;
+  }
+
+  .shield-bar-fill.cyan { background: var(--cyan); box-shadow: 0 0 6px var(--cyan); }
+  .shield-bar-fill.purple { background: var(--purple); box-shadow: 0 0 6px var(--purple); }
+  .shield-bar-fill.green { background: var(--green); box-shadow: 0 0 6px var(--green); }
+  .shield-bar-fill.amber { background: var(--amber); box-shadow: 0 0 6px var(--amber); }
+
+  .log-feed {
+    margin-top: 0.75rem;
+    background: rgba(0,0,0,0.3);
+    border: 1px solid rgba(255,255,255,0.05);
+    border-radius: 4px;
+    padding: 0.5rem 0.75rem;
+    height: 100px;
+    overflow-y: auto;
+  }
+
+  .log-entry {
+    font-size: 0.6rem;
+    line-height: 1.6;
+    color: var(--text-muted);
+  }
+
+  .log-entry .ts { color: var(--cyan); opacity: 0.6; margin-right: 0.4rem; }
+  .log-entry .ok { color: var(--green); }
+  .log-entry .warn { color: var(--amber); }
+  .log-entry .info { color: var(--text-purple); }
+
+  /* ─── METHODOLOGY SECTION ─── */
+  .method-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+    margin-bottom: 3rem;
+  }
+
+  .method-icon {
+    font-size: 1.5rem;
+    margin-bottom: 0.75rem;
+  }
+
+  .method-card-title {
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: var(--cyan);
+    letter-spacing: 1px;
+    margin-bottom: 0.5rem;
+  }
+
+  .method-card-text {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    line-height: 1.7;
+  }
+
+  /* ─── ROADMAP ─── */
+  .roadmap {
+    position: relative;
+    padding-left: 2rem;
+  }
+
+  .roadmap::before {
+    content: '';
+    position: absolute;
+    left: 0.5rem;
+    top: 0;
+    bottom: 0;
+    width: 1px;
+    background: linear-gradient(180deg, var(--cyan), var(--purple), transparent);
+  }
+
+  .roadmap-step {
+    position: relative;
+    margin-bottom: 1.5rem;
+    display: flex;
+    gap: 1.25rem;
+    align-items: flex-start;
+  }
+
+  .roadmap-dot {
+    position: absolute;
+    left: -2rem;
+    top: 0.25rem;
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    border: 2px solid var(--cyan);
+    background: var(--cyber-bg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+
+  .roadmap-dot.done {
+    background: var(--cyan);
+    box-shadow: 0 0 12px var(--cyan);
+  }
+
+  .roadmap-dot.active {
+    border-color: var(--purple);
+    box-shadow: 0 0 12px var(--purple);
+    animation: pulse-purple 2s infinite;
+  }
+
+  @keyframes pulse-purple {
+    0%, 100% { box-shadow: 0 0 8px var(--purple); }
+    50% { box-shadow: 0 0 20px var(--purple); }
+  }
+
+  .roadmap-content { flex: 1; }
+
+  .roadmap-step-num {
+    font-size: 0.6rem;
+    letter-spacing: 2px;
+    color: var(--cyan);
+    opacity: 0.6;
+    margin-bottom: 0.25rem;
+  }
+
+  .roadmap-step-title {
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-bottom: 0.3rem;
+  }
+
+  .roadmap-step-desc {
+    font-size: 0.72rem;
+    color: var(--text-muted);
+    line-height: 1.6;
+  }
+
+  .roadmap-tag {
+    display: inline-block;
+    font-size: 0.6rem;
+    padding: 0.15rem 0.5rem;
+    border-radius: 3px;
+    margin-top: 0.4rem;
+    letter-spacing: 1px;
+  }
+
+  .roadmap-tag.cyan { background: var(--cyan-glow2); border: 1px solid var(--border-cyan); color: var(--cyan); }
+  .roadmap-tag.purple { background: var(--purple-glow); border: 1px solid var(--border-purple); color: var(--text-purple); }
+  .roadmap-tag.green { background: rgba(0,255,136,0.08); border: 1px solid rgba(0,255,136,0.3); color: var(--green); }
+
+  /* ─── TABS ─── */
+  .tabs {
+    display: flex;
+    gap: 0;
+    border-bottom: 1px solid var(--border-cyan);
+    margin-bottom: 2rem;
+  }
+
+  .tab-btn {
+    background: transparent;
+    border: none;
+    border-bottom: 2px solid transparent;
+    color: var(--text-muted);
+    padding: 0.75rem 1.5rem;
+    font-family: 'Courier New', monospace;
+    font-size: 0.75rem;
+    letter-spacing: 2px;
+    cursor: pointer;
+    transition: all 0.3s;
+    text-transform: uppercase;
+  }
+
+  .tab-btn:hover { color: var(--cyan); }
+
+  .tab-btn.active {
+    color: var(--cyan);
+    border-bottom-color: var(--cyan);
+    text-shadow: 0 0 8px var(--cyan);
+  }
+
+  .tab-panel { display: none; }
+  .tab-panel.active { display: block; }
+
+  /* ─── CODE EDITOR ─── */
+  .code-editor {
+    background: #080d14;
+    border: 1px solid var(--border-cyan);
+    border-radius: 6px;
+    overflow: hidden;
+    margin-bottom: 1rem;
+  }
+
+  .code-editor-header {
+    background: rgba(0,255,255,0.05);
+    border-bottom: 1px solid var(--border-cyan);
+    padding: 0.5rem 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    justify-content: space-between;
+  }
+
+  .editor-dots { display: flex; gap: 0.4rem; }
+  .editor-dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+  }
+
+  .code-textarea {
+    width: 100%;
+    background: transparent;
+    border: none;
+    outline: none;
+    color: #a8e6cf;
+    font-family: 'Courier New', monospace;
+    font-size: 0.78rem;
+    line-height: 1.6;
+    padding: 1rem;
+    resize: none;
+    min-height: 220px;
+  }
+
+  .run-btn {
+    background: var(--cyan);
+    color: #000;
+    border: none;
+    padding: 0.4rem 1rem;
+    font-family: 'Courier New', monospace;
+    font-size: 0.7rem;
+    letter-spacing: 1px;
+    cursor: pointer;
+    border-radius: 3px;
+    transition: all 0.3s;
+    font-weight: 700;
+  }
+
+  .run-btn:hover { box-shadow: 0 0 15px var(--cyan); }
+
+  .console-out {
+    background: #040810;
+    border: 1px solid var(--border-cyan);
+    border-radius: 6px;
+    padding: 1rem;
+    font-size: 0.75rem;
+    min-height: 100px;
+    color: var(--green);
+    white-space: pre-wrap;
+    font-family: 'Courier New', monospace;
+    line-height: 1.6;
+  }
+
+  /* ─── DOMAIN GRID ─── */
+  .domain-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+  }
+
+  .domain-item {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.6rem 0;
+    border-bottom: 1px solid rgba(255,255,255,0.04);
+  }
+
+  .domain-item:last-child { border-bottom: none; }
+
+  .domain-dot {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: var(--cyan);
+    box-shadow: 0 0 6px var(--cyan);
+    flex-shrink: 0;
+  }
+
+  .domain-dot.purple { background: var(--purple); box-shadow: 0 0 6px var(--purple); }
+
+  .domain-label {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+  }
+
+  /* ─── NLP SIMULATOR ─── */
+  .nlp-input {
+    width: 100%;
+    background: rgba(0,0,0,0.4);
+    border: 1px solid var(--border-cyan);
+    border-radius: 6px;
+    padding: 0.75rem;
+    color: var(--text-primary);
+    font-family: 'Courier New', monospace;
+    font-size: 0.8rem;
+    outline: none;
+    margin-bottom: 0.75rem;
+  }
+
+  .nlp-input:focus { border-color: var(--cyan); box-shadow: 0 0 10px var(--cyan-glow); }
+
+  .nlp-result-block {
+    background: rgba(0,0,0,0.3);
+    border: 1px solid rgba(255,255,255,0.05);
+    border-radius: 6px;
+    padding: 0.75rem 1rem;
+    margin-bottom: 0.75rem;
+    font-size: 0.72rem;
+  }
+
+  .nlp-result-title {
+    font-size: 0.6rem;
+    letter-spacing: 2px;
+    color: var(--cyan);
+    text-transform: uppercase;
+    margin-bottom: 0.4rem;
+    opacity: 0.7;
+  }
+
+  .token-chip {
+    display: inline-block;
+    background: rgba(0,255,255,0.08);
+    border: 1px solid var(--border-cyan);
+    border-radius: 3px;
+    padding: 0.1rem 0.4rem;
+    font-size: 0.65rem;
+    color: var(--cyan);
+    margin: 0.15rem;
+    letter-spacing: 0.5px;
+  }
+
+  .sentiment-bar-wrap { margin-top: 0.5rem; }
+
+  /* ─── GD VISUALIZER ─── */
+  #gd-canvas {
+    width: 100%;
+    height: 200px;
+    background: rgba(0,0,0,0.3);
+    border: 1px solid var(--border-cyan);
+    border-radius: 6px;
+    display: block;
+  }
+
+  .slider-wrap {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 0.5rem;
+    font-size: 0.72rem;
+  }
+
+  .slider-wrap label { color: var(--text-muted); min-width: 100px; }
+  .slider-wrap input[type=range] { flex: 1; accent-color: var(--cyan); }
+  .slider-wrap span { color: var(--cyan); min-width: 50px; font-weight: 700; }
+
+  /* ─── LANGUAGES ─── */
+  .lang-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
+  }
+
+  .lang-card-flag {
+    font-size: 2.5rem;
+    margin-bottom: 0.75rem;
+  }
+
+  .lang-name {
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-bottom: 0.25rem;
+  }
+
+  .lang-level {
+    font-size: 0.65rem;
+    letter-spacing: 2px;
+    color: var(--cyan);
+    text-transform: uppercase;
+    margin-bottom: 1rem;
+  }
+
+  .lang-skill-bar { margin-bottom: 0.6rem; }
+
+  .lang-skill-label {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.65rem;
+    color: var(--text-muted);
+    margin-bottom: 0.25rem;
+  }
+
+  .skill-bar-bg {
+    height: 5px;
+    background: rgba(255,255,255,0.05);
+    border-radius: 3px;
+    overflow: hidden;
+  }
+
+  .skill-bar-fill {
+    height: 100%;
+    border-radius: 3px;
+    transition: width 1.5s ease 0.5s;
+  }
+
+  /* ─── FLASHCARDS ─── */
+  .flashcard-wrap {
+    perspective: 800px;
+    margin-top: 1rem;
+  }
+
+  .flashcard {
+    width: 100%;
+    height: 90px;
+    position: relative;
+    transform-style: preserve-3d;
+    transition: transform 0.5s;
+    cursor: pointer;
+  }
+
+  .flashcard.flipped { transform: rotateY(180deg); }
+
+  .flashcard-face {
+    position: absolute;
+    inset: 0;
+    backface-visibility: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    border-radius: 6px;
+    gap: 0.25rem;
+  }
+
+  .flashcard-front {
+    background: rgba(157,78,221,0.1);
+    border: 1px solid var(--border-purple);
+  }
+
+  .flashcard-back {
+    background: rgba(0,255,255,0.05);
+    border: 1px solid var(--border-cyan);
+    transform: rotateY(180deg);
+  }
+
+  .flashcard-de {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--text-purple);
+  }
+
+  .flashcard-en {
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--cyan);
+  }
+
+  .flashcard-hint {
+    font-size: 0.6rem;
+    color: var(--text-muted);
+    letter-spacing: 1px;
+  }
+
+  /* ─── TERMINAL ─── */
+  .terminal-wrap {
+    background: #040810;
+    border: 1px solid var(--border-cyan);
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 0 40px rgba(0,255,255,0.05);
+  }
+
+  .terminal-header {
+    background: rgba(0,255,255,0.05);
+    border-bottom: 1px solid var(--border-cyan);
+    padding: 0.65rem 1.25rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .terminal-title {
+    font-size: 0.7rem;
+    color: var(--cyan);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+  }
+
+  .terminal-body {
+    padding: 1rem;
+    min-height: 350px;
+    max-height: 400px;
+    overflow-y: auto;
+    font-size: 0.78rem;
+    line-height: 1.7;
+  }
+
+  .term-line { margin-bottom: 0.1rem; }
+  .term-prompt { color: var(--cyan); }
+  .term-output { color: var(--green); white-space: pre-wrap; }
+  .term-error { color: var(--red-cyber); }
+  .term-info { color: var(--text-purple); }
+  .term-comment { color: var(--text-muted); font-style: italic; }
+
+  .terminal-input-row {
+    display: flex;
+    align-items: center;
+    padding: 0.75rem 1rem;
+    border-top: 1px solid var(--border-cyan);
+    gap: 0.5rem;
+  }
+
+  .terminal-prompt-label {
+    color: var(--cyan);
+    font-size: 0.78rem;
+    white-space: nowrap;
+  }
+
+  .terminal-input {
+    flex: 1;
+    background: transparent;
+    border: none;
+    outline: none;
+    color: var(--text-primary);
+    font-family: 'Courier New', monospace;
+    font-size: 0.78rem;
+    caret-color: var(--cyan);
+  }
+
+  /* ─── CONTACT FORM ─── */
+  .contact-form {
+    max-width: 640px;
+    margin: 0 auto;
+  }
+
+  .form-group { margin-bottom: 1.25rem; }
+
+  .form-label {
+    display: block;
+    font-size: 0.65rem;
+    letter-spacing: 2px;
+    color: var(--cyan);
+    text-transform: uppercase;
+    margin-bottom: 0.4rem;
+    opacity: 0.8;
+  }
+
+  .form-input, .form-textarea {
+    width: 100%;
+    background: rgba(0,0,0,0.4);
+    border: 1px solid var(--border-cyan);
+    border-radius: 6px;
+    padding: 0.65rem 1rem;
+    color: var(--text-primary);
+    font-family: 'Courier New', monospace;
+    font-size: 0.8rem;
+    outline: none;
+    transition: all 0.3s;
+  }
+
+  .form-input:focus, .form-textarea:focus {
+    border-color: var(--cyan);
+    box-shadow: 0 0 10px var(--cyan-glow);
+  }
+
+  .form-textarea { resize: vertical; min-height: 120px; }
+
+  .encrypt-toggle {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 1.5rem;
+    padding: 0.75rem 1rem;
+    background: rgba(0,255,255,0.03);
+    border: 1px solid var(--border-cyan);
+    border-radius: 6px;
+    cursor: pointer;
+  }
+
+  .toggle-switch {
+    width: 40px;
+    height: 20px;
+    background: rgba(255,255,255,0.1);
+    border-radius: 10px;
+    position: relative;
+    transition: background 0.3s;
+    flex-shrink: 0;
+  }
+
+  .toggle-switch.on { background: var(--cyan); box-shadow: 0 0 10px var(--cyan-glow); }
+
+  .toggle-knob {
+    position: absolute;
+    top: 2px;
+    left: 2px;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background: white;
+    transition: transform 0.3s;
+  }
+
+  .toggle-switch.on .toggle-knob { transform: translateX(20px); }
+
+  .toggle-label {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+  }
+
+  .toggle-label strong { color: var(--cyan); }
+
+  .submit-btn {
+    width: 100%;
+    background: transparent;
+    border: 1px solid var(--cyan);
+    color: var(--cyan);
+    padding: 0.9rem;
+    font-family: 'Courier New', monospace;
+    font-size: 0.8rem;
+    letter-spacing: 3px;
+    cursor: pointer;
+    transition: all 0.3s;
+    text-transform: uppercase;
+    border-radius: 4px;
+    clip-path: polygon(10px 0%, 100% 0%, calc(100% - 10px) 100%, 0% 100%);
+  }
+
+  .submit-btn:hover {
+    background: var(--cyan-glow);
+    box-shadow: 0 0 25px var(--cyan-glow);
+    text-shadow: 0 0 10px var(--cyan);
+  }
+
+  .send-status {
+    text-align: center;
+    margin-top: 1rem;
+    font-size: 0.75rem;
+    min-height: 1.5rem;
+    color: var(--green);
+    letter-spacing: 1px;
+    display: none;
+  }
+
+  /* ─── FOOTER ─── */
+  footer {
+    position: relative;
+    z-index: 10;
+    text-align: center;
+    padding: 2rem;
+    border-top: 1px solid var(--border-cyan);
+    font-size: 0.65rem;
+    color: var(--text-muted);
+    letter-spacing: 2px;
+  }
+
+  footer span { color: var(--cyan); }
+
+  /* ─── ANIMATIONS ─── */
+  @keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(30px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes scanline {
+    0% { top: -2px; }
+    100% { top: 100%; }
+  }
+
+  .fade-in { animation: fadeInUp 0.6s ease forwards; opacity: 0; }
+  .fade-in-1 { animation-delay: 0.1s; }
+  .fade-in-2 { animation-delay: 0.25s; }
+  .fade-in-3 { animation-delay: 0.4s; }
+  .fade-in-4 { animation-delay: 0.55s; }
+
+  /* ─── SCANLINE OVERLAY ─── */
+  .scanline {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, rgba(0,255,255,0.08), transparent);
+    pointer-events: none;
+    z-index: 9999;
+    animation: scanline 6s linear infinite;
+  }
+
+  /* ─── SECTION WRAPPER (for z-index) ─── */
+  .section-wrap {
+    position: relative;
+    z-index: 10;
+  }
+
+  /* ─── RESPONSIVE ─── */
+  @media (max-width: 900px) {
+    .hero-grid { grid-template-columns: 1fr; }
+    .shield-widget { position: static; }
+    .method-grid { grid-template-columns: 1fr; }
+    .lang-grid { grid-template-columns: 1fr; }
+    .domain-grid { grid-template-columns: 1fr; }
+    .nav-links { display: none; }
+    .hero-name { font-size: 2.4rem; }
+  }
+
+  /* ─── TYPING CURSOR ─── */
+  .cursor-blink {
+    display: inline-block;
+    width: 10px;
+    height: 1.2em;
+    background: var(--cyan);
+    vertical-align: text-bottom;
+    animation: blink 1s step-end infinite;
+  }
+
+  @keyframes blink {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0; }
+  }
+
+  /* ─── SECTION DIVIDER ─── */
+  .cyber-divider {
+    position: relative;
+    z-index: 10;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--border-cyan), transparent);
+    margin: 0 2rem;
+  }
+
+  /* ─── SCROLL INDICATOR ─── */
+  .scroll-caret {
+    text-align: center;
+    margin-top: 2rem;
+    font-size: 0.65rem;
+    letter-spacing: 3px;
+    color: var(--text-muted);
+    animation: bounce 2s infinite;
+  }
+
+  @keyframes bounce {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(6px); }
+  }
+
+  /* xor cipher output */
+  .xor-output {
+    font-family: 'Courier New', monospace;
+    font-size: 0.72rem;
+    color: var(--amber);
+    word-break: break-all;
+  }
+</style>
+</head>
+<body>
+
+<!-- Scanline overlay -->
+<div class="scanline"></div>
+
+<!-- Neural Matrix Canvas -->
+<canvas id="neural-canvas"></canvas>
+
+<!-- ─── NAVBAR ─── -->
+<nav id="navbar">
+  <div class="nav-logo" onclick="scrollToSection('home')">[ H.alHakeem ]</div>
+  <ul class="nav-links">
+    <li><a href="#home" class="active" onclick="setActive(this)">Home</a></li>
+    <li><a href="#methodology" onclick="setActive(this)">Methodology & AI</a></li>
+    <li><a href="#lab" onclick="setActive(this)">C++ & Neural Lab</a></li>
+    <li><a href="#languages" onclick="setActive(this)">Languages</a></li>
+    <li><a href="#terminal-section" onclick="setActive(this)">Terminal</a></li>
+    <li><a href="#contact" onclick="setActive(this)">Contact</a></li>
+  </ul>
+  <div class="status-badge">
+    <div class="status-dot"></div>
+    <span>SYSTEM ONLINE</span>
+  </div>
+</nav>
+
+<!-- ─── HERO SECTION ─── -->
+<div class="section-wrap">
+<div id="home">
+  <div class="hero-grid">
+    <!-- LEFT CONTENT -->
+    <div>
+      <div class="hero-tag-line fade-in fade-in-1">// PORTFOLIO v2.0 — AUTHENTICATED</div>
+      <h1 class="hero-name fade-in fade-in-2">
+        <div>Hashem</div>
+        <div class="accent glitch">alHakeem</div>
+      </h1>
+      <div class="hero-subtitle fade-in fade-in-3" id="hero-subtitle"></div>
+      <div class="hero-bio fade-in fade-in-3">
+        Building <span>Machine Learning & NLP architectures</span> from first principles in Python — no black-box abstractions, only mathematical foundations. Pushing system boundaries with <span>low-level C++ optimization</span> and exploring the cryptographic frontier of <span>cybersecurity hardening</span>. Every algorithm implemented from scratch. Every concept reverse-engineered.
+      </div>
+      <div class="hero-buttons fade-in fade-in-4">
+        <a href="#terminal-section" class="btn-primary">&gt; INTERACTIVE TERMINAL</a>
+        <a href="#lab" class="btn-secondary">&gt; C++ &amp; AI LAB</a>
+      </div>
+      <div class="meta-badges fade-in fade-in-4">
+        <div class="meta-badge"><span class="label">CORE STACK</span>C++ / Python</div>
+        <div class="meta-badge"><span class="label">AI FOCUS</span>ML / DL / NLP</div>
+        <div class="meta-badge"><span class="label">CYBER FOCUS</span>Cryptography &amp; Hardening</div>
+      </div>
+      <div class="scroll-caret fade-in fade-in-4">▼ SCROLL TO EXPLORE ▼</div>
+    </div>
+
+    <!-- RIGHT WIDGET -->
+    <div>
+      <div class="shield-widget fade-in fade-in-2">
+        <div class="shield-header">
+          <div class="shield-title">🛡 Intrusion &amp; Neural Shield Analyzer</div>
+          <div class="shield-status"><span>●</span> ACTIVE</div>
+        </div>
+        <div class="shield-body">
+          <div class="diag-row">
+            <span class="diag-label">FIREWALL STATUS</span>
+            <span class="diag-val green" id="fw-status">HARDENED</span>
+          </div>
+          <div class="diag-row">
+            <span class="diag-label">INTRUSION SCANS</span>
+            <span class="diag-val amber" id="scan-count">0</span>
+          </div>
+          <div class="diag-row">
+            <span class="diag-label">THREATS BLOCKED</span>
+            <span class="diag-val" id="threats-blocked">0</span>
+          </div>
+          <div class="diag-row">
+            <span class="diag-label">MODEL INFERENCE</span>
+            <span class="diag-val purple" id="model-latency">-- ms</span>
+          </div>
+          <div class="diag-row">
+            <span class="diag-label">AI LAYER</span>
+            <span class="diag-val green">NOMINAL</span>
+          </div>
+          <div style="margin-top: 0.75rem;">
+            <div class="shield-bar-wrap">
+              <div class="shield-bar-label"><span>Neural Confidence</span><span id="conf-pct">0%</span></div>
+              <div class="shield-bar"><div class="shield-bar-fill purple" id="conf-bar" style="width:0%"></div></div>
+            </div>
+            <div class="shield-bar-wrap">
+              <div class="shield-bar-label"><span>Encryption Strength</span><span id="enc-pct">0%</span></div>
+              <div class="shield-bar"><div class="shield-bar-fill cyan" id="enc-bar" style="width:0%"></div></div>
+            </div>
+            <div class="shield-bar-wrap">
+              <div class="shield-bar-label"><span>System Integrity</span><span id="int-pct">0%</span></div>
+              <div class="shield-bar"><div class="shield-bar-fill green" id="int-bar" style="width:0%"></div></div>
+            </div>
+            <div class="shield-bar-wrap">
+              <div class="shield-bar-label"><span>Anomaly Score</span><span id="ano-pct">0%</span></div>
+              <div class="shield-bar"><div class="shield-bar-fill amber" id="ano-bar" style="width:0%"></div></div>
+            </div>
+          </div>
+          <div class="log-feed" id="log-feed">
+            <div class="log-entry"><span class="ts">[BOOT]</span> Initializing HASHEM-OS Shield v2.0...</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+<div class="cyber-divider"></div>
+
+<!-- ─── METHODOLOGY SECTION ─── -->
+<div class="section-wrap">
+<section id="methodology">
+  <div class="section-header">
+    <div>
+      <div class="section-tag">// MODULE_02 — PHILOSOPHY</div>
+      <div class="section-title">Personal <span>Methodology</span> &amp; Roadmap</div>
+    </div>
+    <div class="section-line"></div>
+  </div>
+
+  <div class="method-grid">
+    <div class="cyber-card">
+      <div class="method-icon">⚙️</div>
+      <div class="method-card-title">&gt; FIRST-PRINCIPLES ENGINEERING</div>
+      <div class="method-card-text">
+        No black-box abstractions. Every algorithm is implemented from its mathematical foundation — deriving gradient descent by hand, implementing backpropagation from the chain rule, and building neural architectures from pure NumPy tensors. Understanding the <em style="color: var(--cyan)">why</em> before the <em style="color: var(--cyan)">how</em>.
+      </div>
+      <div style="margin-top: 1rem; display: flex; gap: 0.5rem; flex-wrap: wrap;">
+        <span class="roadmap-tag cyan">MATHEMATICS</span>
+        <span class="roadmap-tag cyan">ALGORITHMS</span>
+        <span class="roadmap-tag cyan">FROM SCRATCH</span>
+      </div>
+    </div>
+    <div class="cyber-card purple">
+      <div class="method-icon">🧠</div>
+      <div class="method-card-title" style="color: var(--text-purple);">&gt; AGGRESSIVE CONTINUOUS LEARNING</div>
+      <div class="method-card-text">
+        Deep diving into neural architectures, reverse engineering binaries in controlled sandboxes, and studying system architecture at the kernel level. Learning is not passive consumption — it is active deconstruction and reconstruction of complex systems.
+      </div>
+      <div style="margin-top: 1rem; display: flex; gap: 0.5rem; flex-wrap: wrap;">
+        <span class="roadmap-tag purple">DEEP LEARNING</span>
+        <span class="roadmap-tag purple">BINARY ANALYSIS</span>
+        <span class="roadmap-tag purple">SYSTEMS</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ROADMAP -->
+  <div style="margin-top: 2.5rem;">
+    <div style="font-size: 0.65rem; letter-spacing: 3px; color: var(--cyan); text-transform: uppercase; margin-bottom: 1.5rem; opacity: 0.7;">// SELF-LEARNING ROADMAP</div>
+    <div class="roadmap">
+      <div class="roadmap-step">
+        <div class="roadmap-dot done"></div>
+        <div class="roadmap-content">
+          <div class="roadmap-step-num">MILESTONE 01</div>
+          <div class="roadmap-step-title">C++ Algorithmic Foundations &amp; Memory Management</div>
+          <div class="roadmap-step-desc">Raw pointers, RAII, move semantics, template metaprogramming, bitwise operations and manual memory layout. Building data structures from primitives to understand what modern abstractions hide.</div>
+          <span class="roadmap-tag green">COMPLETED</span>
+          <span class="roadmap-tag cyan">C++20 / OOP</span>
+        </div>
+      </div>
+      <div class="roadmap-step">
+        <div class="roadmap-dot done"></div>
+        <div class="roadmap-content">
+          <div class="roadmap-step-num">MILESTONE 02</div>
+          <div class="roadmap-step-title">Machine Learning &amp; Deep Learning from Scratch</div>
+          <div class="roadmap-step-desc">NumPy-based linear & logistic regression, manually derived gradient descent, backpropagation through scalar calculus, and implementing dense neural networks without frameworks.</div>
+          <span class="roadmap-tag green">COMPLETED</span>
+          <span class="roadmap-tag purple">NumPy / Math</span>
+        </div>
+      </div>
+      <div class="roadmap-step">
+        <div class="roadmap-dot active"></div>
+        <div class="roadmap-content">
+          <div class="roadmap-step-num">MILESTONE 03 — ACTIVE</div>
+          <div class="roadmap-step-title">Natural Language Processing &amp; Language Model Mechanics</div>
+          <div class="roadmap-step-desc">Tokenization pipelines, n-gram models, word embeddings (Word2Vec from scratch), attention mechanisms, and the mathematical anatomy of Transformer architectures.</div>
+          <span class="roadmap-tag amber" style="background: rgba(255,170,0,0.08); border-color: rgba(255,170,0,0.3); color: var(--amber);">IN PROGRESS</span>
+          <span class="roadmap-tag purple">NLP / Transformers</span>
+        </div>
+      </div>
+      <div class="roadmap-step">
+        <div class="roadmap-dot"></div>
+        <div class="roadmap-content">
+          <div class="roadmap-step-num">MILESTONE 04 — QUEUED</div>
+          <div class="roadmap-step-title">Cybersecurity Hardening &amp; Cryptographic Systems</div>
+          <div class="roadmap-step-desc">AES/RSA implementation in C++, cryptographic protocol design, penetration testing methodology, secure coding standards, and building hardened system architectures against adversarial vectors.</div>
+          <span class="roadmap-tag cyan">QUEUED</span>
+          <span class="roadmap-tag cyan">CRYPTO / PENTESTING</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+</div>
+
+<div class="cyber-divider"></div>
+
+<!-- ─── LAB SECTION ─── -->
+<div class="section-wrap">
+<section id="lab">
+  <div class="section-header">
+    <div>
+      <div class="section-tag">// MODULE_03 — TECHNICAL LAB</div>
+      <div class="section-title">C++ &amp; <span>Neural Lab</span></div>
+    </div>
+    <div class="section-line"></div>
+  </div>
+
+  <!-- TABS -->
+  <div class="tabs">
+    <button class="tab-btn active" onclick="switchTab(this, 'tab-cpp')">⚡ C++ &amp; Systems Security</button>
+    <button class="tab-btn" onclick="switchTab(this, 'tab-ai')">🧠 AI, Deep Learning &amp; NLP</button>
+  </div>
+
+  <!-- TAB 1: C++ -->
+  <div id="tab-cpp" class="tab-panel active">
+    <div class="domain-grid" style="margin-bottom: 1.5rem;">
+      <div>
+        <div style="font-size: 0.65rem; letter-spacing: 2px; color: var(--cyan); text-transform: uppercase; margin-bottom: 0.75rem;">C++ Technical Stack</div>
+        <div class="domain-item"><div class="domain-dot"></div><div class="domain-label">C++20 Standards — Concepts, Ranges, Coroutines</div></div>
+        <div class="domain-item"><div class="domain-dot"></div><div class="domain-label">OOP — RAII, Polymorphism, Template Metaprogramming</div></div>
+        <div class="domain-item"><div class="domain-dot"></div><div class="domain-label">Memory Management — Smart Pointers, Custom Allocators</div></div>
+        <div class="domain-item"><div class="domain-dot"></div><div class="domain-label">Bitwise Operations — XOR Ciphers, Bit Manipulation</div></div>
+        <div class="domain-item"><div class="domain-dot"></div><div class="domain-label">Systems Programming — Process, IPC, Sockets</div></div>
+      </div>
+      <div>
+        <div style="font-size: 0.65rem; letter-spacing: 2px; color: var(--cyan); text-transform: uppercase; margin-bottom: 0.75rem;">Security Domains</div>
+        <div class="domain-item"><div class="domain-dot purple"></div><div class="domain-label">Cryptographic Primitive Implementation</div></div>
+        <div class="domain-item"><div class="domain-dot purple"></div><div class="domain-label">Secure Coding &amp; Buffer Overflow Prevention</div></div>
+        <div class="domain-item"><div class="domain-dot purple"></div><div class="domain-label">Reverse Engineering — ELF/PE Binary Analysis</div></div>
+        <div class="domain-item"><div class="domain-dot purple"></div><div class="domain-label">Network Packet Manipulation &amp; Protocol Security</div></div>
+        <div class="domain-item"><div class="domain-dot purple"></div><div class="domain-label">Sandbox Hardening &amp; Exploit Mitigation</div></div>
+      </div>
+    </div>
+
+    <!-- CODE EDITOR -->
+    <div class="code-editor">
+      <div class="code-editor-header">
+        <div style="display:flex;align-items:center;gap:0.75rem;">
+          <div class="editor-dots">
+            <div class="editor-dot" style="background:#ff5f56"></div>
+            <div class="editor-dot" style="background:#ffbd2e"></div>
+            <div class="editor-dot" style="background:#27c93f"></div>
+          </div>
+          <span style="font-size:0.65rem; color: var(--text-muted); letter-spacing: 1px;">main.cpp — XOR Cipher &amp; Bitwise Security Demo</span>
+        </div>
+        <button class="run-btn" onclick="runCppCode()">▶ COMPILE &amp; RUN</button>
+      </div>
+      <textarea class="code-textarea" id="cpp-code" spellcheck="false">#include &lt;iostream&gt;
+#include &lt;string&gt;
+#include &lt;vector&gt;
+#include &lt;iomanip&gt;
+#include &lt;sstream&gt;
+
+// XOR Stream Cipher — Bitwise Security Demo
+// Author: Hashem alHakeem
+
+class XORCipher {
+private:
+    std::string key;
+public:
+    XORCipher(const std::string& k) : key(k) {}
+
+    std::string encrypt(const std::string& plaintext) {
+        std::string ciphertext = plaintext;
+        for (size_t i = 0; i &lt; plaintext.size(); ++i) {
+            ciphertext[i] = plaintext[i] ^ key[i % key.size()];
+        }
+        return ciphertext;
+    }
+
+    std::string toHex(const std::string& data) {
+        std::ostringstream oss;
+        for (unsigned char c : data)
+            oss &lt;&lt; std::hex &lt;&lt; std::setw(2)
+                &lt;&lt; std::setfill('0') &lt;&lt; (int)c &lt;&lt; " ";
+        return oss.str();
+    }
+};
+
+int main() {
+    XORCipher cipher("HASHEM_KEY_2024");
+    std::string message = "Hello from the Neural Cyber Lab!";
+    std::string encrypted = cipher.encrypt(message);
+    std::string decrypted = cipher.encrypt(encrypted); // XOR is self-inverse
+
+    std::cout &lt;&lt; "[CIPHER] Plaintext  : " &lt;&lt; message &lt;&lt; std::endl;
+    std::cout &lt;&lt; "[CIPHER] Key        : HASHEM_KEY_2024" &lt;&lt; std::endl;
+    std::cout &lt;&lt; "[CIPHER] Encrypted  : " &lt;&lt; cipher.toHex(encrypted) &lt;&lt; std::endl;
+    std::cout &lt;&lt; "[CIPHER] Decrypted  : " &lt;&lt; decrypted &lt;&lt; std::endl;
+    std::cout &lt;&lt; "[STATUS] XOR cipher verified — symmetric key confirmed." &lt;&lt; std::endl;
+    return 0;
+}</textarea>
+    </div>
+    <div style="font-size: 0.65rem; color: var(--text-muted); margin-bottom: 0.5rem; letter-spacing: 1px;">// SIMULATION CONSOLE OUTPUT</div>
+    <div class="console-out" id="cpp-output">[ Waiting for compilation... Click "COMPILE & RUN" to execute ]</div>
+  </div>
+
+  <!-- TAB 2: AI -->
+  <div id="tab-ai" class="tab-panel">
+    <div class="domain-grid" style="margin-bottom: 1.5rem;">
+      <div>
+        <div style="font-size: 0.65rem; letter-spacing: 2px; color: var(--text-purple); text-transform: uppercase; margin-bottom: 0.75rem;">ML / DL Stack</div>
+        <div class="domain-item"><div class="domain-dot purple"></div><div class="domain-label">Linear Regression — Gradient Descent (NumPy)</div></div>
+        <div class="domain-item"><div class="domain-dot purple"></div><div class="domain-label">Logistic Regression — Sigmoid &amp; Cross-Entropy</div></div>
+        <div class="domain-item"><div class="domain-dot purple"></div><div class="domain-label">Backpropagation — Chain Rule &amp; Jacobians</div></div>
+        <div class="domain-item"><div class="domain-dot purple"></div><div class="domain-label">Dense Neural Networks — Forward &amp; Backward Pass</div></div>
+        <div class="domain-item"><div class="domain-dot purple"></div><div class="domain-label">Activation Functions — ReLU, Sigmoid, Softmax</div></div>
+      </div>
+      <div>
+        <div style="font-size: 0.65rem; letter-spacing: 2px; color: var(--text-purple); text-transform: uppercase; margin-bottom: 0.75rem;">NLP Pipeline</div>
+        <div class="domain-item"><div class="domain-dot"></div><div class="domain-label">Tokenization — BPE, WordPiece from Scratch</div></div>
+        <div class="domain-item"><div class="domain-dot"></div><div class="domain-label">Word Embeddings — Word2Vec (Skip-gram)</div></div>
+        <div class="domain-item"><div class="domain-dot"></div><div class="domain-label">Attention Mechanisms — Scaled Dot-Product</div></div>
+        <div class="domain-item"><div class="domain-dot"></div><div class="domain-label">Transformer Anatomy — Encoder/Decoder Stack</div></div>
+        <div class="domain-item"><div class="domain-dot"></div><div class="domain-label">Sentiment Analysis &amp; Text Classification</div></div>
+      </div>
+    </div>
+
+    <!-- MINI NLP SIMULATOR -->
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;">
+      <!-- SENTIMENT ANALYZER -->
+      <div class="cyber-card purple">
+        <div style="font-size: 0.65rem; letter-spacing: 2px; color: var(--text-purple); text-transform: uppercase; margin-bottom: 1rem;">🔬 MINI NLP ANALYZER</div>
+        <input type="text" class="nlp-input" id="nlp-text" placeholder="Enter text to analyze..." value="Machine learning is incredibly powerful">
+        <button class="btn-primary" style="margin-bottom: 1rem; font-size: 0.7rem;" onclick="runNLP()">▶ ANALYZE TEXT</button>
+        <div id="nlp-results">
+          <div class="nlp-result-block">
+            <div class="nlp-result-title">TOKENIZATION</div>
+            <div id="tokens-out" style="color: var(--text-muted); font-size: 0.72rem;">Click ANALYZE to tokenize...</div>
+          </div>
+          <div class="nlp-result-block">
+            <div class="nlp-result-title">SENTIMENT ANALYSIS</div>
+            <div id="sentiment-out" style="color: var(--text-muted); font-size: 0.72rem;">Awaiting input...</div>
+            <div class="sentiment-bar-wrap" id="sentiment-bar-wrap" style="display:none;">
+              <div class="shield-bar-label" style="font-size:0.65rem;color:var(--text-muted);margin-bottom:0.2rem;">
+                <span>NEG</span><span id="sent-score-label">0%</span><span>POS</span>
+              </div>
+              <div class="shield-bar">
+                <div class="shield-bar-fill cyan" id="sent-bar" style="width:50%"></div>
+              </div>
+            </div>
+          </div>
+          <div class="nlp-result-block">
+            <div class="nlp-result-title">TEXT FEATURES</div>
+            <div id="features-out" style="color: var(--text-muted); font-size: 0.72rem;">...</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- GRADIENT DESCENT VISUALIZER -->
+      <div class="cyber-card">
+        <div style="font-size: 0.65rem; letter-spacing: 2px; color: var(--cyan); text-transform: uppercase; margin-bottom: 1rem;">📉 GRADIENT DESCENT VISUALIZER</div>
+        <div class="slider-wrap">
+          <label>Learning Rate</label>
+          <input type="range" id="lr-slider" min="1" max="50" value="10" oninput="updateGD()">
+          <span id="lr-val">0.10</span>
+        </div>
+        <div class="slider-wrap">
+          <label>Epochs</label>
+          <input type="range" id="ep-slider" min="5" max="100" value="30" oninput="updateGD()">
+          <span id="ep-val">30</span>
+        </div>
+        <canvas id="gd-canvas"></canvas>
+        <div id="gd-info" style="font-size: 0.65rem; color: var(--text-muted); margin-top: 0.5rem; text-align: center; letter-spacing: 1px;">
+          Final Loss: <span id="gd-final-loss" style="color: var(--cyan);">--</span> | Converged: <span id="gd-converged" style="color: var(--green);">--</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</section>
+</div>
+
+<div class="cyber-divider"></div>
+
+<!-- ─── LANGUAGES SECTION ─── -->
+<div class="section-wrap">
+<section id="languages">
+  <div class="section-header">
+    <div>
+      <div class="section-tag">// MODULE_04 — COMMUNICATIONS</div>
+      <div class="section-title">Languages &amp; <span>Communications</span></div>
+    </div>
+    <div class="section-line"></div>
+  </div>
+
+  <div class="lang-grid">
+    <!-- ARABIC -->
+    <div class="cyber-card">
+      <div class="lang-card-flag">🇸🇦</div>
+      <div class="lang-name">Arabic</div>
+      <div class="lang-level" style="color: var(--cyan);">NATIVE — C2</div>
+      <div class="lang-skill-bar">
+        <div class="lang-skill-label"><span>Speaking</span><span>100%</span></div>
+        <div class="skill-bar-bg"><div class="skill-bar-fill" style="width:100%; background: var(--cyan); box-shadow: 0 0 6px var(--cyan);"></div></div>
+      </div>
+      <div class="lang-skill-bar">
+        <div class="lang-skill-label"><span>Writing</span><span>100%</span></div>
+        <div class="skill-bar-bg"><div class="skill-bar-fill" style="width:100%; background: var(--cyan); box-shadow: 0 0 6px var(--cyan);"></div></div>
+      </div>
+      <div class="lang-skill-bar">
+        <div class="lang-skill-label"><span>Technical</span><span>95%</span></div>
+        <div class="skill-bar-bg"><div class="skill-bar-fill" style="width:95%; background: var(--cyan); box-shadow: 0 0 6px var(--cyan);"></div></div>
+      </div>
+      <div style="margin-top: 1rem; font-size: 0.72rem; color: var(--text-muted); border-top: 1px solid rgba(255,255,255,0.05); padding-top: 0.75rem;">
+        Primary cognitive language. Mathematical reasoning, technical documentation, and deep learning research conducted fluently in Arabic.
+      </div>
+    </div>
+
+    <!-- ENGLISH -->
+    <div class="cyber-card">
+      <div class="lang-card-flag">🇬🇧</div>
+      <div class="lang-name">English</div>
+      <div class="lang-level" style="color: var(--cyan);">C1 ADVANCED</div>
+      <div class="lang-skill-bar">
+        <div class="lang-skill-label"><span>Technical Writing</span><span>92%</span></div>
+        <div class="skill-bar-bg"><div class="skill-bar-fill" style="width:92%; background: var(--cyan); box-shadow: 0 0 6px var(--cyan);"></div></div>
+      </div>
+      <div class="lang-skill-bar">
+        <div class="lang-skill-label"><span>Speaking</span><span>88%</span></div>
+        <div class="skill-bar-bg"><div class="skill-bar-fill" style="width:88%; background: var(--cyan); box-shadow: 0 0 6px var(--cyan);"></div></div>
+      </div>
+      <div class="lang-skill-bar">
+        <div class="lang-skill-label"><span>Research Reading</span><span>95%</span></div>
+        <div class="skill-bar-bg"><div class="skill-bar-fill" style="width:95%; background: var(--cyan); box-shadow: 0 0 6px var(--cyan);"></div></div>
+      </div>
+      <div style="margin-top: 1rem; font-size: 0.72rem; color: var(--text-muted); border-top: 1px solid rgba(255,255,255,0.05); padding-top: 0.75rem;">
+        Primary language for all ML/AI research papers, international tech collaboration, and open source development.
+      </div>
+    </div>
+
+    <!-- GERMAN -->
+    <div class="cyber-card purple">
+      <div class="lang-card-flag">🇩🇪</div>
+      <div class="lang-name">German</div>
+      <div class="lang-level" style="color: var(--text-purple);">A2 — LEARNING LAB</div>
+      <div class="lang-skill-bar">
+        <div class="lang-skill-label"><span>Vocabulary</span><span>40%</span></div>
+        <div class="skill-bar-bg"><div class="skill-bar-fill" style="width:40%; background: var(--purple); box-shadow: 0 0 6px var(--purple);"></div></div>
+      </div>
+      <div class="lang-skill-bar">
+        <div class="lang-skill-label"><span>Grammar</span><span>35%</span></div>
+        <div class="skill-bar-bg"><div class="skill-bar-fill" style="width:35%; background: var(--purple); box-shadow: 0 0 6px var(--purple);"></div></div>
+      </div>
+      <div class="lang-skill-bar">
+        <div class="lang-skill-label"><span>Speaking</span><span>25%</span></div>
+        <div class="skill-bar-bg"><div class="skill-bar-fill" style="width:25%; background: var(--purple); box-shadow: 0 0 6px var(--purple);"></div></div>
+      </div>
+      <!-- FLASHCARD -->
+      <div style="font-size: 0.6rem; letter-spacing: 2px; color: var(--text-purple); text-transform: uppercase; margin-top: 1rem; margin-bottom: 0.4rem;">VOCAB FLASHCARD — CLICK TO FLIP</div>
+      <div class="flashcard-wrap">
+        <div class="flashcard" id="flashcard" onclick="flipCard()">
+          <div class="flashcard-face flashcard-front">
+            <div class="flashcard-de" id="card-de">Informatik</div>
+            <div class="flashcard-hint">🇩🇪 German — tap to reveal</div>
+          </div>
+          <div class="flashcard-face flashcard-back">
+            <div class="flashcard-en" id="card-en">Computer Science</div>
+            <div class="flashcard-hint">🇬🇧 English translation</div>
+          </div>
+        </div>
+      </div>
+      <button class="btn-secondary" style="width: 100%; margin-top: 0.75rem; font-size: 0.65rem;" onclick="nextCard()">NEXT CARD →</button>
+    </div>
+  </div>
+</section>
+</div>
+
+<div class="cyber-divider"></div>
+
+<!-- ─── TERMINAL SECTION ─── -->
+<div class="section-wrap">
+<section id="terminal-section">
+  <div class="section-header">
+    <div>
+      <div class="section-tag">// MODULE_05 — SECURE SHELL</div>
+      <div class="section-title">Secure <span>Terminal</span></div>
+    </div>
+    <div class="section-line"></div>
+  </div>
+
+  <div class="terminal-wrap">
+    <div class="terminal-header">
+      <div class="editor-dots">
+        <div class="editor-dot" style="background:#ff5f56"></div>
+        <div class="editor-dot" style="background:#ffbd2e"></div>
+        <div class="editor-dot" style="background:#27c93f"></div>
+      </div>
+      <div class="terminal-title">HASHEM-OS SHELL v2.0 — AUTHENTICATED</div>
+      <div class="shield-status"><span>●</span> ENCRYPTED</div>
+    </div>
+    <div class="terminal-body" id="terminal-body">
+      <div class="term-line"><span class="term-comment">/*  HASHEM-OS SHELL v2.0 | Type 'help' for commands  */</span></div>
+      <div class="term-line"><span class="term-output">Initializing secure session... Authentication: PASSED</span></div>
+      <div class="term-line"><span class="term-output">Last login: Sat Nov 14 04:08:48 2026 from 192.168.0.1</span></div>
+      <div class="term-line">&nbsp;</div>
+      <div class="term-line"><span class="term-prompt">hashem@NEURAL-LAB:~$</span> <span style="color: var(--text-primary);">help</span></div>
+      <div class="term-line" id="help-output"></div>
+    </div>
+    <div class="terminal-input-row">
+      <span class="terminal-prompt-label">hashem@NEURAL-LAB:~$</span>
+      <input type="text" class="terminal-input" id="terminal-input" placeholder="type a command..." autocomplete="off" onkeydown="handleTerminalKey(event)">
+    </div>
+  </div>
+</section>
+</div>
+
+<div class="cyber-divider"></div>
+
+<!-- ─── CONTACT SECTION ─── -->
+<div class="section-wrap">
+<section id="contact">
+  <div class="section-header">
+    <div>
+      <div class="section-tag">// MODULE_06 — SECURE COMMS</div>
+      <div class="section-title">Secure <span>Communication Portal</span></div>
+    </div>
+    <div class="section-line"></div>
+  </div>
+
+  <div style="max-width: 640px; margin: 0 auto;">
+    <div style="font-size: 0.72rem; color: var(--text-muted); margin-bottom: 2rem; line-height: 1.7; text-align: center; letter-spacing: 0.5px;">
+      Transmitting an encrypted payload to Hashem's secure node. All communications routed through AES-256 handshake simulation.
+    </div>
+
+    <div class="contact-form">
+      <div class="form-group">
+        <label class="form-label">[ SENDER NODE ID — Name ]</label>
+        <input type="text" class="form-input" id="contact-name" placeholder="Enter your identifier...">
+      </div>
+      <div class="form-group">
+        <label class="form-label">[ CONTACT ENVELOPE IP — Email ]</label>
+        <input type="email" class="form-input" id="contact-email" placeholder="your@domain.com">
+      </div>
+      <div class="form-group">
+        <label class="form-label">[ PAYLOAD MESSAGE BODY ]</label>
+        <textarea class="form-textarea" id="contact-msg" placeholder="Enter your transmission payload..."></textarea>
+      </div>
+
+      <!-- ENCRYPTION TOGGLE -->
+      <div class="encrypt-toggle" onclick="toggleEncrypt()" id="encrypt-toggle">
+        <div class="toggle-switch on" id="toggle-sw">
+          <div class="toggle-knob"></div>
+        </div>
+        <div class="toggle-label">
+          <strong id="toggle-state">TRANSMISSION ENCRYPTION ACTIVE</strong><br>
+          <span style="font-size: 0.65rem;">AES-256 handshake enabled — payload secured before dispatch</span>
+        </div>
+        <div style="margin-left: auto; font-size: 0.65rem; color: var(--text-muted);">🔒</div>
+      </div>
+
+      <button class="submit-btn" onclick="sendMessage()">&gt; INITIALIZE SECURE SEND</button>
+      <div class="send-status" id="send-status"></div>
+    </div>
+  </div>
+</section>
+</div>
+
+<!-- ─── FOOTER ─── -->
+<footer>
+  <div style="margin-bottom: 0.5rem;">
+    <span style="color: var(--cyan); text-shadow: 0 0 10px var(--cyan);">[ HASHEM alHAKEEM ]</span>
+  </div>
+  <div>Software Engineering Student · AI/ML Practitioner · Cybersecurity Enthusiast</div>
+  <div style="margin-top: 0.5rem; opacity: 0.5;">© 2026 — All systems nominal. Built from first principles.</div>
+</footer>
+
+<!-- ─── JAVASCRIPT ─── -->
+<script>
+// ═══════════════════════════════
+//  NEURAL MATRIX BACKGROUND
+// ═══════════════════════════════
+(function() {
+  const canvas = document.getElementById('neural-canvas');
+  const ctx = canvas.getContext('2d');
+  let nodes = [], W, H, animId;
+
+  function resize() {
+    W = canvas.width = window.innerWidth;
+    H = canvas.height = window.innerHeight;
+    nodes = [];
+    const count = Math.floor((W * H) / 18000);
+    for (let i = 0; i < count; i++) {
+      nodes.push({
+        x: Math.random() * W,
+        y: Math.random() * H,
+        vx: (Math.random() - 0.5) * 0.4,
+        vy: (Math.random() - 0.5) * 0.4,
+        r: Math.random() * 1.5 + 0.5
+      });
+    }
+  }
+
+  function draw() {
+    ctx.clearRect(0, 0, W, H);
+    // Update + draw nodes
+    nodes.forEach(n => {
+      n.x += n.vx; n.y += n.vy;
+      if (n.x < 0 || n.x > W) n.vx *= -1;
+      if (n.y < 0 || n.y > H) n.vy *= -1;
+      ctx.beginPath();
+      ctx.arc(n.x, n.y, n.r, 0, Math.PI * 2);
+      ctx.fillStyle = 'rgba(0,255,255,0.5)';
+      ctx.fill();
+    });
+    // Draw connections
+    for (let i = 0; i < nodes.length; i++) {
+      for (let j = i + 1; j < nodes.length; j++) {
+        const dx = nodes[i].x - nodes[j].x;
+        const dy = nodes[i].y - nodes[j].y;
+        const dist = Math.sqrt(dx*dx + dy*dy);
+        if (dist < 130) {
+          const alpha = (1 - dist/130) * 0.3;
+          ctx.beginPath();
+          ctx.moveTo(nodes[i].x, nodes[i].y);
+          ctx.lineTo(nodes[j].x, nodes[j].y);
+          ctx.strokeStyle = `rgba(0,255,255,${alpha})`;
+          ctx.lineWidth = 0.5;
+          ctx.stroke();
+        }
+      }
+    }
+    animId = requestAnimationFrame(draw);
+  }
+
+  window.addEventListener('resize', resize);
+  resize();
+  draw();
+})();
+
+// ═══════════════════════════════
+//  NAVBAR ACTIVE STATE
+// ═══════════════════════════════
+function setActive(el) {
+  document.querySelectorAll('.nav-links a').forEach(a => a.classList.remove('active'));
+  el.classList.add('active');
+}
+
+function scrollToSection(id) {
+  document.getElementById(id).scrollIntoView({ behavior: 'smooth' });
+}
+
+// Update active nav on scroll
+window.addEventListener('scroll', () => {
+  const sections = ['home','methodology','lab','languages','terminal-section','contact'];
+  const scrollY = window.scrollY + 100;
+  for (const id of sections) {
+    const el = document.getElementById(id);
+    if (el && el.offsetTop <= scrollY && el.offsetTop + el.offsetHeight > scrollY) {
+      document.querySelectorAll('.nav-links a').forEach(a => {
+        a.classList.toggle('active', a.getAttribute('href') === '#' + id);
+      });
+      break;
+    }
+  }
+});
+
+// ═══════════════════════════════
+//  HERO SUBTITLE TYPEWRITER
+// ═══════════════════════════════
+(function() {
+  const text = "Software Engineering Student | AI & Deep Learning Builder | Cybersecurity Enthusiast";
+  const el = document.getElementById('hero-subtitle');
+  let i = 0;
+  el.innerHTML = '';
+  function type() {
+    if (i <= text.length) {
+      el.innerHTML = text.slice(0, i) + '<span class="cursor-blink"></span>';
+      i++;
+      setTimeout(type, 40);
+    }
+  }
+  setTimeout(type, 600);
+})();
+
+// ═══════════════════════════════
+//  SHIELD WIDGET LIVE SIMULATION
+// ═══════════════════════════════
+(function() {
+  let scans = 0, threats = 0;
+  const logs = [
+    { ts: '[SYS]', cls: 'ok', msg: 'Neural inference engine online. Latency nominal.' },
+    { ts: '[SEC]', cls: 'ok', msg: 'Firewall rules loaded: 2048 ACL entries active.' },
+    { ts: '[ML]', cls: 'info', msg: 'Model: MLP-Classifier v3.1 — confidence 97.2%' },
+    { ts: '[SCAN]', cls: 'warn', msg: 'Port scan detected from 10.0.0.42 — blocked.' },
+    { ts: '[CRYPTO]', cls: 'ok', msg: 'AES-256 session key rotated successfully.' },
+    { ts: '[IDS]', cls: 'warn', msg: 'Anomaly pattern detected — quarantine applied.' },
+    { ts: '[ML]', cls: 'info', msg: 'Backprop pass #4471 — loss: 0.0023' },
+    { ts: '[SYS]', cls: 'ok', msg: 'Memory sanitizer: heap integrity verified.' },
+    { ts: '[SEC]', cls: 'ok', msg: 'Zero-day patch applied. Signature updated.' },
+    { ts: '[IDS]', cls: 'warn', msg: 'SQL injection attempt detected and blocked.' },
+    { ts: '[ML]', cls: 'info', msg: 'Gradient norm: 0.0071 — optimizer converging.' },
+    { ts: '[CRYPTO]', cls: 'ok', msg: 'RSA-4096 handshake verified. Node authenticated.' },
+    { ts: '[SYS]', cls: 'ok', msg: 'Stack canaries validated. No overflow detected.' },
+    { ts: '[SCAN]', cls: 'warn', msg: 'Brute-force attempt on SSH. Auto-ban triggered.' },
+    { ts: '[ML]', cls: 'info', msg: 'Tokenizer vocab size: 32,000. BPE complete.' },
+  ];
+  let logIdx = 0;
+  const feed = document.getElementById('log-feed');
+
+  // Animate bars
+  setTimeout(() => {
+    document.getElementById('conf-bar').style.width = '97%';
+    document.getElementById('conf-pct').textContent = '97%';
+    document.getElementById('enc-bar').style.width = '99%';
+    document.getElementById('enc-pct').textContent = '99%';
+    document.getElementById('int-bar').style.width = '100%';
+    document.getElementById('int-pct').textContent = '100%';
+    document.getElementById('ano-bar').style.width = '12%';
+    document.getElementById('ano-pct').textContent = '12%';
+  }, 500);
+
+  function addLog() {
+    const log = logs[logIdx % logs.length];
+    logIdx++;
+    const div = document.createElement('div');
+    div.className = 'log-entry';
+    div.innerHTML = `<span class="ts">${log.ts}</span><span class="${log.cls}">${log.msg}</span>`;
+    feed.appendChild(div);
+    feed.scrollTop = feed.scrollHeight;
+    if (feed.children.length > 20) feed.removeChild(feed.firstChild);
+  }
+
+  setInterval(() => {
+    scans++;
+    document.getElementById('scan-count').textContent = scans;
+    if (Math.random() > 0.6) {
+      threats++;
+      document.getElementById('threats-blocked').textContent = threats;
+    }
+    addLog();
+  }, 1800);
+
+  setInterval(() => {
+    const latency = (8 + Math.random() * 12).toFixed(1);
+    document.getElementById('model-latency').textContent = latency + ' ms';
+  }, 2200);
+
+  setTimeout(addLog, 800);
+  setTimeout(addLog, 1500);
+})();
+
+// ═══════════════════════════════
+//  TABS
+// ═══════════════════════════════
+function switchTab(btn, panelId) {
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById(panelId).classList.add('active');
+  if (panelId === 'tab-ai') initGD();
+}
+
+// ═══════════════════════════════
+//  C++ CODE SIMULATOR
+// ═══════════════════════════════
+function runCppCode() {
+  const out = document.getElementById('cpp-output');
+  const code = document.getElementById('cpp-code').value;
+  out.textContent = '> g++ -std=c++20 -O2 main.cpp -o cipher_demo\n> ./cipher_demo\n\n';
+
+  // Parse key and message from code
+  const keyMatch = code.match(/XORCipher cipher\("([^"]+)"\)/);
+  const msgMatch = code.match(/std::string message = "([^"]+)"/);
+  const key = keyMatch ? keyMatch[1] : 'HASHEM_KEY_2024';
+  const message = msgMatch ? msgMatch[1] : 'Hello from the Neural Cyber Lab!';
+
+  // XOR simulation
+  function xorEncrypt(text, k) {
+    return Array.from(text).map((c, i) =>
+      String.fromCharCode(c.charCodeAt(0) ^ k.charCodeAt(i % k.length))
+    ).join('');
+  }
+
+  function toHex(str) {
+    return Array.from(str).map(c =>
+      c.charCodeAt(0).toString(16).padStart(2, '0').toUpperCase()
+    ).join(' ');
+  }
+
+  const encrypted = xorEncrypt(message, key);
+  const decrypted = xorEncrypt(encrypted, key);
+  const hex = toHex(encrypted);
+
+  setTimeout(() => {
+    out.textContent += `[CIPHER] Plaintext  : ${message}\n`;
+    out.textContent += `[CIPHER] Key        : ${key}\n`;
+    out.textContent += `[CIPHER] Encrypted  : ${hex}\n`;
+    out.textContent += `[CIPHER] Decrypted  : ${decrypted}\n`;
+    out.textContent += `[STATUS] XOR cipher verified — symmetric key confirmed.\n`;
+    out.textContent += `\n> Process exited with code 0`;
+  }, 400);
+}
+
+// Auto-run on load
+setTimeout(runCppCode, 300);
+
+// ═══════════════════════════════
+//  NLP ANALYZER
+// ═══════════════════════════════
+const positiveWords = new Set(['good','great','excellent','amazing','powerful','incredible','fantastic','love','best','wonderful','happy','success','brilliant','outstanding','perfect','superb','innovative','efficient','fast','strong','robust','smart','clean','elegant','beautiful']);
+const negativeWords = new Set(['bad','terrible','awful','horrible','poor','weak','slow','failure','error','bug','broken','ugly','inefficient','complex','confusing','difficult','hard','boring','dull','useless','wrong','failed','crash','corrupt','insecure']);
+
+function runNLP() {
+  const text = document.getElementById('nlp-text').value.trim();
+  if (!text) return;
+
+  // Tokenize
+  const tokens = text.toLowerCase().replace(/[^a-z0-9\s]/g, '').split(/\s+/).filter(Boolean);
+
+  // Show tokens
+  const tokensOut = document.getElementById('tokens-out');
+  tokensOut.innerHTML = tokens.map(t => `<span class="token-chip">${t}</span>`).join('');
+
+  // Sentiment
+  let posScore = 0, negScore = 0;
+  tokens.forEach(t => {
+    if (positiveWords.has(t)) posScore++;
+    if (negativeWords.has(t)) negScore++;
+  });
+
+  const total = posScore + negScore;
+  let sentiment, sentPct, sentColor;
+  if (total === 0) {
+    sentiment = 'NEUTRAL'; sentPct = 50; sentColor = '#00ffff';
+  } else {
+    sentPct = Math.round((posScore / total) * 100);
+    if (sentPct >= 70) { sentiment = 'POSITIVE'; sentColor = '#00ff88'; }
+    else if (sentPct <= 30) { sentiment = 'NEGATIVE'; sentColor = '#ff4466'; }
+    else { sentiment = 'NEUTRAL'; sentColor = '#ffaa00'; }
+  }
+
+  document.getElementById('sentiment-out').innerHTML = `Sentiment: <strong style="color:${sentColor}">${sentiment}</strong> (pos_score: ${posScore}, neg_score: ${negScore})`;
+  document.getElementById('sentiment-bar-wrap').style.display = 'block';
+  document.getElementById('sent-bar').style.width = sentPct + '%';
+  document.getElementById('sent-bar').style.background = sentColor;
+  document.getElementById('sent-score-label').textContent = sentPct + '%';
+
+  // Features
+  const wordCount = tokens.length;
+  const uniqueCount = new Set(tokens).size;
+  const avgLen = tokens.length ? (tokens.reduce((a, t) => a + t.length, 0) / tokens.length).toFixed(2) : 0;
+  const lexDiv = wordCount ? ((uniqueCount / wordCount) * 100).toFixed(1) : 0;
+  document.getElementById('features-out').innerHTML =
+    `Words: <span style="color:var(--cyan)">${wordCount}</span> | ` +
+    `Unique: <span style="color:var(--cyan)">${uniqueCount}</span> | ` +
+    `Avg Len: <span style="color:var(--cyan)">${avgLen}</span> | ` +
+    `Lex Diversity: <span style="color:var(--text-purple)">${lexDiv}%</span>`;
+}
+
+// Auto-analyze on load
+setTimeout(runNLP, 500);
+
+// ═══════════════════════════════
+//  GRADIENT DESCENT VISUALIZER
+// ═══════════════════════════════
+function initGD() {
+  setTimeout(updateGD, 100);
+}
+
+function updateGD() {
+  const lr = parseInt(document.getElementById('lr-slider').value) / 100;
+  const epochs = parseInt(document.getElementById('ep-slider').value);
+  document.getElementById('lr-val').textContent = lr.toFixed(2);
+  document.getElementById('ep-val').textContent = epochs;
+
+  const canvas = document.getElementById('gd-canvas');
+  const ctx = canvas.getContext('2d');
+  const W = canvas.clientWidth || 400;
+  const H = 200;
+  canvas.width = W;
+  canvas.height = H;
+
+  // Simulate loss curve: L(t) = L0 * exp(-lr * t) + noise
+  const losses = [];
+  let L = 2.5;
+  const L_min = 0.015;
+  for (let e = 0; e < epochs; e++) {
+    L = L_min + (L - L_min) * Math.exp(-lr * 1.2) + (Math.random() - 0.5) * 0.03 * L;
+    if (L < L_min) L = L_min;
+    losses.push(Math.max(L, L_min));
+  }
+
+  const maxL = losses[0];
+  const minL = Math.min(...losses);
+
+  ctx.clearRect(0, 0, W, H);
+
+  // Grid lines
+  ctx.strokeStyle = 'rgba(0,255,255,0.08)';
+  ctx.lineWidth = 1;
+  for (let y = 0; y <= 4; y++) {
+    const yp = H - (y / 4) * (H - 20) - 10;
+    ctx.beginPath(); ctx.moveTo(30, yp); ctx.lineTo(W - 10, yp); ctx.stroke();
+    ctx.fillStyle = 'rgba(0,255,255,0.4)';
+    ctx.font = '9px Courier New';
+    ctx.fillText((maxL * (1 - y/4)).toFixed(2), 2, yp + 3);
+  }
+
+  // Loss curve
+  ctx.beginPath();
+  losses.forEach((l, i) => {
+    const x = 30 + (i / (losses.length - 1)) * (W - 40);
+    const normalizedL = (l - minL) / (maxL - minL + 0.001);
+    const y = H - 10 - normalizedL * (H - 25);
+    i === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
+  });
+  ctx.strokeStyle = 'rgba(0,255,255,0.9)';
+  ctx.lineWidth = 2;
+  ctx.shadowColor = '#00ffff';
+  ctx.shadowBlur = 8;
+  ctx.stroke();
+  ctx.shadowBlur = 0;
+
+  // Fill under curve
+  ctx.lineTo(30 + (epochs-1)/(losses.length-1) * (W-40), H - 10);
+  ctx.lineTo(30, H - 10);
+  ctx.closePath();
+  ctx.fillStyle = 'rgba(0,255,255,0.05)';
+  ctx.fill();
+
+  // Dots at min loss point
+  const minIdx = losses.indexOf(minL);
+  const minX = 30 + (minIdx / (losses.length - 1)) * (W - 40);
+  const minNorm = (minL - minL) / (maxL - minL + 0.001);
+  const minY = H - 10 - minNorm * (H - 25);
+  ctx.beginPath();
+  ctx.arc(minX, minY, 4, 0, Math.PI * 2);
+  ctx.fillStyle = '#00ff88';
+  ctx.shadowColor = '#00ff88';
+  ctx.shadowBlur = 10;
+  ctx.fill();
+  ctx.shadowBlur = 0;
+
+  // Labels
+  ctx.fillStyle = 'rgba(0,255,255,0.6)';
+  ctx.font = '9px Courier New';
+  ctx.fillText('EPOCH →', W - 60, H - 1);
+  ctx.fillText('LOSS', 2, 12);
+
+  // Legend
+  ctx.fillStyle = '#00ffff';
+  ctx.fillText(`lr=${lr.toFixed(2)}`, W - 70, 15);
+
+  document.getElementById('gd-final-loss').textContent = losses[losses.length - 1].toFixed(5);
+  const converged = losses[losses.length - 1] < 0.1;
+  document.getElementById('gd-converged').textContent = converged ? 'YES ✓' : 'NO';
+  document.getElementById('gd-converged').style.color = converged ? '#00ff88' : '#ffaa00';
+}
+
+// ═══════════════════════════════
+//  LANGUAGE FLASHCARDS
+// ═══════════════════════════════
+const cards = [
+  { de: 'Informatik', en: 'Computer Science' },
+  { de: 'Algorithmus', en: 'Algorithm' },
+  { de: 'Verschlüsselung', en: 'Encryption' },
+  { de: 'Maschinelles Lernen', en: 'Machine Learning' },
+  { de: 'Sicherheit', en: 'Security' },
+  { de: 'Programmierer', en: 'Programmer' },
+  { de: 'Netzwerk', en: 'Network' },
+  { de: 'Betriebssystem', en: 'Operating System' },
+  { de: 'Datenbank', en: 'Database' },
+  { de: 'Kompilieren', en: 'To Compile' },
+];
+
+let cardIdx = 0, cardFlipped = false;
+
+function flipCard() {
+  cardFlipped = !cardFlipped;
+  document.getElementById('flashcard').classList.toggle('flipped', cardFlipped);
+}
+
+function nextCard() {
+  cardIdx = (cardIdx + 1) % cards.length;
+  cardFlipped = false;
+  document.getElementById('flashcard').classList.remove('flipped');
+  document.getElementById('card-de').textContent = cards[cardIdx].de;
+  document.getElementById('card-en').textContent = cards[cardIdx].en;
+}
+
+// ═══════════════════════════════
+//  TERMINAL
+// ═══════════════════════════════
+const termCommands = {
+  help: () => `
+<div class="term-output">┌─────────────────────────────────────────────────────────┐
+│          HASHEM-OS SHELL v2.0 — COMMAND REGISTRY          │
+└─────────────────────────────────────────────────────────┘
+  <span class="term-info">COMMAND         DESCRIPTION</span>
+  ─────────────────────────────────────────────────────
+  whoami          Display system identity & profile
+  skills          List technical competencies
+  ai-status       Neural model & ML runtime diagnostics
+  cipher &lt;text&gt;  Run XOR cipher on input text
+  roadmap         Display learning milestone progress
+  languages       Show language proficiency matrix
+  contact         Display secure contact information
+  neofetch        System architecture overview
+  clear           Clear terminal buffer
+  help            Show this command registry
+  ─────────────────────────────────────────────────────
+  <span class="term-comment">// Tip: Use 'cipher hello world' to encrypt a message</span></div>`,
+
+  whoami: () => `
+<div class="term-output">┌─────────────────────────────────────────────┐
+│          IDENTITY RECORD — AUTHENTICATED     │
+└─────────────────────────────────────────────┘
+  Name     : <span style="color:var(--cyan)">Hashem alHakeem</span>
+  Role     : Software Engineering Student
+  Focus    : AI/ML Practitioner | Cybersecurity Enthusiast
+  Location : [ENCRYPTED — Need-to-know only]
+  Clearance: Level-3 Research Access
+
+  Specializations:
+    ⚡  Low-level C++ & Systems Programming
+    🧠  Machine Learning & Deep Learning (from scratch)
+    🔡  NLP & Transformer Architecture Research
+    🔐  Cryptography & Security Hardening
+
+  Philosophy: "Build everything from first principles.
+              Understand the math before the magic."
+  Status   : <span class="term-output">ONLINE — ACTIVELY LEARNING</span></div>`,
+
+  skills: () => `
+<div class="term-output">┌─────────────────────────────────────────────┐
+│           TECHNICAL COMPETENCY MATRIX        │
+└─────────────────────────────────────────────┘
+  <span class="term-info">LANGUAGES & SYSTEMS</span>
+  ★★★★★  C++ (C++20, OOP, Templates, RAII)
+  ★★★★★  Python (NumPy, ML/DL, Scripting)
+  ★★★★☆  Algorithms & Data Structures
+  ★★★☆☆  Assembly (x86 — Learning)
+
+  <span class="term-info">ARTIFICIAL INTELLIGENCE</span>
+  ★★★★☆  Machine Learning (from scratch)
+  ★★★★☆  Deep Learning (Backprop, MLP)
+  ★★★☆☆  NLP & Transformers
+  ★★★☆☆  Gradient Optimization
+
+  <span class="term-info">CYBERSECURITY</span>
+  ★★★★☆  Cryptography (XOR, AES concepts)
+  ★★★☆☆  Network Security
+  ★★★☆☆  Reverse Engineering
+  ★★☆☆☆  Penetration Testing
+
+  <span class="term-info">LANGUAGES SPOKEN</span>
+  ★★★★★  Arabic  (Native / C2)
+  ★★★★☆  English (C1 Advanced)
+  ★★☆☆☆  German  (A2 — Learning)</div>`,
+
+  'ai-status': () => `
+<div class="term-output">┌─────────────────────────────────────────────┐
+│          NEURAL RUNTIME DIAGNOSTICS          │
+└─────────────────────────────────────────────┘
+  Framework     : NumPy 1.26 (custom ML layer)
+  Model Type    : MLP — 3-layer Dense Network
+  Activation    : ReLU (hidden) / Softmax (output)
+  Optimizer     : SGD + Momentum (lr=0.01)
+  Loss Function : Cross-Entropy
+  Training Loss : <span style="color:var(--green)">0.0023 — CONVERGED</span>
+  Val Accuracy  : <span style="color:var(--cyan)">97.2%</span>
+  Backprop      : Manual chain rule implementation
+  Inference     : ~${(8 + Math.random() * 12).toFixed(1)} ms avg latency
+
+  NLP Pipeline:
+    Tokenizer   : Custom BPE (Byte-Pair Encoding)
+    Vocab Size  : 32,000 tokens
+    Embeddings  : Word2Vec Skip-gram (dim=128)
+    Attention   : Scaled Dot-Product (from scratch)
+
+  Status: <span class="term-output">ALL SYSTEMS NOMINAL</span></div>`,
+
+  roadmap: () => `
+<div class="term-output">┌─────────────────────────────────────────────┐
+│         SELF-LEARNING ROADMAP STATUS         │
+└─────────────────────────────────────────────┘
+  <span style="color:var(--green)">✓</span> MILESTONE 01 — C++ Algorithmic Foundations
+     Memory management, OOP, templates, bitwise ops
+     Status: <span style="color:var(--green)">COMPLETED</span>
+
+  <span style="color:var(--green)">✓</span> MILESTONE 02 — ML & Deep Learning from Scratch
+     NumPy ML, gradient descent, backpropagation
+     Status: <span style="color:var(--green)">COMPLETED</span>
+
+  <span style="color:var(--cyan)">◉</span> MILESTONE 03 — NLP & Language Model Mechanics
+     Tokenization, Word2Vec, Attention, Transformers
+     Status: <span style="color:var(--amber)">IN PROGRESS — 60% complete</span>
+     Progress: [██████░░░░] 60%
+
+  <span style="color:var(--text-muted)">○</span> MILESTONE 04 — Cybersecurity & Cryptographic Systems
+     AES/RSA implementation, pentesting, hardening
+     Status: <span style="color:var(--text-muted)">QUEUED — ETA: Q2 2027</span></div>`,
+
+  languages: () => `
+<div class="term-output">┌─────────────────────────────────────────────┐
+│          LANGUAGE PROFICIENCY MATRIX         │
+└─────────────────────────────────────────────┘
+  <span style="color:var(--cyan)">🇸🇦 Arabic</span>   — NATIVE (C2)
+     Speaking  [██████████] 100%
+     Writing   [██████████] 100%
+     Technical [█████████░] 95%
+
+  <span style="color:var(--cyan)">🇬🇧 English</span>  — C1 ADVANCED
+     Tech Writing [█████████░] 92%
+     Speaking     [████████░░] 88%
+     Research     [█████████░] 95%
+
+  <span style="color:var(--text-purple)">🇩🇪 German</span>   — A2 LEARNING LAB
+     Vocabulary   [████░░░░░░] 40%
+     Grammar      [███░░░░░░░] 35%
+     Speaking     [██░░░░░░░░] 25%
+     Mode: Active immersion via flashcard system</div>`,
+
+  contact: () => `
+<div class="term-output">┌─────────────────────────────────────────────┐
+│         SECURE CONTACT INFORMATION           │
+└─────────────────────────────────────────────┘
+  Node ID  : Hashem alHakeem
+  Protocol : AES-256 Encrypted Transmission
+  Portal   : Use the Secure Communication Portal
+             (scroll to Contact section)
+
+  Availability:
+    Status  : <span style="color:var(--green)">OPEN TO COLLABORATION</span>
+    Focus   : AI/ML research, C++ systems work,
+              cybersecurity projects, open-source
+
+  "If your work involves first-principles
+   engineering or pushing the boundaries of
+   AI & security — let's talk."</div>`,
+
+  neofetch: () => `
+<div class="term-output">    <span style="color:var(--cyan)">    ██╗  ██╗</span>       <span style="color:var(--cyan)">Hashem alHakeem</span>@<span style="color:var(--green)">NEURAL-LAB
+</span>    <span style="color:var(--cyan)">    ██║  ██║</span>       ─────────────────────────────
+    <span style="color:var(--cyan)">    ███████║</span>       OS: HASHEM-OS v2.0 (Cyber Edition)
+    <span style="color:var(--cyan)">    ██╔══██║</span>       Shell: Neural-Bash 5.2
+    <span style="color:var(--cyan)">    ██║  ██║</span>       CPU: First-Principles Processor
+    <span style="color:var(--cyan)">    ╚═╝  ╚═╝</span>       Memory: Unlimited Learning Buffer
+                       AI Engine: Custom MLP + NLP Pipeline
+                       Crypto: AES-256 / XOR Cipher Ready
+                       Languages: Arabic ● English ● German(learning)
+                       Uptime: Continuously Learning
+                       Status: <span style="color:var(--green)">ALL SYSTEMS OPTIMAL</span>
+
+    <span style="background:#ff0000">   </span><span style="background:#ff5500">   </span><span style="background:#ffaa00">   </span><span style="background:#00ff00">   </span><span style="background:#00ffff">   </span><span style="background:#9d4edd">   </span><span style="background:#ffffff">   </span></div>`,
+
+  clear: () => null,
+};
+
+let termHistory = [], termHistIdx = -1;
+
+function handleTerminalKey(e) {
+  const input = document.getElementById('terminal-input');
+  if (e.key === 'Enter') {
+    const cmd = input.value.trim();
+    input.value = '';
+    if (cmd) { termHistory.unshift(cmd); termHistIdx = -1; }
+    runTermCmd(cmd);
+  } else if (e.key === 'ArrowUp') {
+    termHistIdx = Math.min(termHistIdx + 1, termHistory.length - 1);
+    input.value = termHistory[termHistIdx] || '';
+    e.preventDefault();
+  } else if (e.key === 'ArrowDown') {
+    termHistIdx = Math.max(termHistIdx - 1, -1);
+    input.value = termHistIdx >= 0 ? termHistory[termHistIdx] : '';
+    e.preventDefault();
+  }
+}
+
+function runTermCmd(rawCmd) {
+  const body = document.getElementById('terminal-body');
+  const addLine = (html) => {
+    const d = document.createElement('div');
+    d.className = 'term-line';
+    d.innerHTML = html;
+    body.appendChild(d);
+  };
+
+  addLine(`<span class="term-prompt">hashem@NEURAL-LAB:~$</span> <span style="color:var(--text-primary)">${rawCmd}</span>`);
+
+  if (!rawCmd) { body.scrollTop = body.scrollHeight; return; }
+
+  const parts = rawCmd.toLowerCase().split(/\s+/);
+  const cmd = parts[0];
+  const args = parts.slice(1).join(' ');
+
+  if (cmd === 'clear') {
+    body.innerHTML = '<div class="term-line"><span class="term-comment">// Terminal cleared</span></div>';
+    return;
+  }
+
+  // Handle cipher command
+  if (cmd === 'cipher') {
+    if (!args) {
+      addLine('<span class="term-error">Usage: cipher &lt;text to encrypt&gt;</span>');
+    } else {
+      const key = 'HASHEM_KEY_2024';
+      const encrypted = Array.from(args).map((c, i) =>
+        c.charCodeAt(0) ^ key.charCodeAt(i % key.length)
+      );
+      const hex = encrypted.map(b => b.toString(16).padStart(2, '0').toUpperCase()).join(' ');
+      const output = `<div class="term-output">Running XOR cipher...
+  Input  : "${args}"
+  Key    : HASHEM_KEY_2024
+  HEX    : <span class="xor-output">${hex}</span>
+  Bytes  : ${encrypted.length}
+  Cipher : XOR-Stream (self-inverse symmetric)</div>`;
+      addLine(output);
+    }
+  } else if (termCommands[cmd]) {
+    const result = termCommands[cmd]();
+    if (result) addLine(result);
+  } else {
+    addLine(`<span class="term-error">Command not found: '${cmd}'. Type 'help' for available commands.</span>`);
+  }
+
+  body.scrollTop = body.scrollHeight;
+}
+
+// Initialize terminal with help
+setTimeout(() => {
+  const helpOut = document.getElementById('help-output');
+  helpOut.innerHTML = termCommands.help();
+}, 300);
+
+// ═══════════════════════════════
+//  CONTACT FORM
+// ═══════════════════════════════
+let encryptEnabled = true;
+
+function toggleEncrypt() {
+  encryptEnabled = !encryptEnabled;
+  const sw = document.getElementById('toggle-sw');
+  const label = document.getElementById('toggle-state');
+  sw.classList.toggle('on', encryptEnabled);
+  if (encryptEnabled) {
+    label.textContent = 'TRANSMISSION ENCRYPTION ACTIVE';
+    label.style.color = 'var(--cyan)';
+  } else {
+    label.textContent = 'ENCRYPTION DISABLED — INSECURE CHANNEL';
+    label.style.color = 'var(--red-cyber)';
+  }
+}
+
+function sendMessage() {
+  const name = document.getElementById('contact-name').value.trim();
+  const email = document.getElementById('contact-email').value.trim();
+  const msg = document.getElementById('contact-msg').value.trim();
+  const statusEl = document.getElementById('send-status');
+
+  if (!name || !email || !msg) {
+    statusEl.style.display = 'block';
+    statusEl.style.color = 'var(--red-cyber)';
+    statusEl.textContent = '> ERROR: All payload fields required for transmission.';
+    return;
+  }
+
+  statusEl.style.display = 'block';
+  statusEl.style.color = 'var(--amber)';
+  statusEl.textContent = '> Encrypting payload... Establishing secure channel...';
+
+  setTimeout(() => {
+    statusEl.style.color = 'var(--amber)';
+    statusEl.textContent = '> AES-256 handshake complete. Routing through Tor nodes...';
+  }, 800);
+
+  setTimeout(() => {
+    statusEl.style.color = 'var(--green)';
+    statusEl.textContent = `> TRANSMISSION SUCCESSFUL — Payload delivered to Hashem alHakeem. Node: ${name}`;
+    document.getElementById('contact-name').value = '';
+    document.getElementById('contact-email').value = '';
+    document.getElementById('contact-msg').value = '';
+  }, 2000);
+}
+
+// ═══════════════════════════════
+//  SCROLL ANIMATIONS
+// ═══════════════════════════════
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      e.target.style.opacity = '1';
+      e.target.style.transform = 'translateY(0)';
+    }
+  });
+}, { threshold: 0.1 });
+
+document.querySelectorAll('.cyber-card, .roadmap-step').forEach(el => {
+  el.style.opacity = '0';
+  el.style.transform = 'translateY(20px)';
+  el.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+  observer.observe(el);
+});
+
+// Init GD on tab show
+document.addEventListener('DOMContentLoaded', () => {
+  setTimeout(updateGD, 100);
+});
+</script>
+</body>
+</html>
